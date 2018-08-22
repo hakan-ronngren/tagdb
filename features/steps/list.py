@@ -9,19 +9,10 @@ def step_impl(context, objects, tag):
         for object in objects.split(','):
             f.write(object + '\n')
 
-@given('the daemon is running')
-def step_impl(context):
-    os.system('mkdir -p features/testdata && cd features/testdata && ( ../../tagdb-server.py > /dev/null 2>&1 & ) &')
-    while True:
-        try:
-            http.client.HTTPConnection('localhost:3134').request('GET', '/')
-            return
-        except ConnectionRefusedError as e:
-            time.sleep(0.1)
-
 @when('I issue: "{commandline}"')
 def step_impl(context, commandline):
     global output
+    http.client.HTTPConnection('localhost:3134').request('POST', '/reload')
     output = os.popen('./' + commandline).read()
 
 @then('the output lines should be "{expected}" in any order')

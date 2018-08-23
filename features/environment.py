@@ -2,7 +2,7 @@ import http.client
 import glob, os, time
 
 def before_all(context):
-    os.system('mkdir -p features/testdata && cd features/testdata && ( ../../tagdb-server.py > testserver.log 2>&1 & ) &')
+    os.system('cd features/testdata && ( ../../tagdb-server.py > testserver.log 2>&1 & ) &')
     while True:
         try:
             http.client.HTTPConnection('localhost:3134').request('GET', '/')

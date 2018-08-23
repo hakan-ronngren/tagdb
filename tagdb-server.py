@@ -5,6 +5,8 @@ from flask import request
 
 import glob, os, sys
 
+CONFIG_FILE = 'tagdb-config.yaml'
+
 app = Flask(__name__)
 
 def load_database():
@@ -42,5 +44,10 @@ def shutdown():
 
 if __name__ == '__main__':
     load_database()
-    app.run(host = '127.0.0.1', threaded=False, debug=True, port=3134)
-
+    try:
+        with open(CONFIG_FILE) as f:
+            config = yaml.load(''.join(f.readlines()))
+    except FileNotFoundError:
+        print('no %s here - using defaults' % CONFIG_FILE)
+        config = {'port': 3134}
+    app.run(host = '127.0.0.1', threaded = False, debug = True, port = config['port'])

@@ -3,7 +3,7 @@
 from flask import Flask
 from flask import request
 
-import glob, os, sys
+import glob, os, sys, yaml
 
 CONFIG_FILE = 'tagdb-config.yaml'
 

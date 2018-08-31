@@ -1,2 +1,2 @@
-#!/bin/sh
-exec python `dirname $0`/tagdb.py "$@"
+#!/bin/bash
+exec python "$(dirname "$0")/tagdb.py" "$@"

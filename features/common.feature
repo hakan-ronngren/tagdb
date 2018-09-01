@@ -30,6 +30,15 @@ Feature: All features in one file for DRY reasons
     Then the output lines should be "fruit,yellow" in any order
 
 
+  Scenario: get an alphabetical list of all existing tags
+    Given that the tag "fruit" applies to "banana"
+    And that the tag "nut" applies to "cashew"
+    And that the tag "meat" applies to "ham"
+    And that the tag "dairy" applies to "milk"
+    When I enter: "tagdb tags"
+    Then the output lines should be "dairy,fruit,meat,nut" in this order
+
+
   Scenario: set an new tag to an object
     When I enter: "tagdb tag fruit banana"
     And I enter: "tagdb list fruit"

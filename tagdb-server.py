@@ -54,6 +54,15 @@ def tag():
             f.write('\n'.join(db[tag]))
     return ''
 
+@app.route('/tags', methods = ['GET'])
+def tags():
+    global db
+    keys = []
+    for k in db.keys():
+        keys.append(k)
+    keys.sort()
+    return '\n'.join(keys)
+
 @app.route('/reload', methods = ['POST'])
 def reload():
     load_database()

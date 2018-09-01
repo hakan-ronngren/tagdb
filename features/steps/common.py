@@ -22,6 +22,13 @@ def step_impl(context, expected):
     output_set = set(output.strip().split('\n'))
     output_set.should.equal(expected_set)
 
+@then('the output lines should be "{expected}" in this order')
+def step_impl(context, expected):
+    global output
+    expected = expected.split(',')
+    output = output.strip().split('\n')
+    output.should.equal(expected)
+
 @then('the output should be empty')
 def step_impl(context):
     global output

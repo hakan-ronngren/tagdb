@@ -12,7 +12,7 @@ def usage():
     print("usage: tagdb <operation> [<arg> [...]]")
     print("    tagdb tag <tag> [...] <object> : set tag(s) on an object")
     print("    tagdb list <tag>               : list all objects that have a tag")
-    print("    tagdb whatis <object>          : list all tags for an object")
+    print("    tagdb describe <object>        : list all tags for an object")
     print("    tagdb reload                   : forcefully reload the database")
     print("    tagdb shutdown                 : shut the database down")
 
@@ -38,8 +38,8 @@ def main():
         usage()
     elif args[1] == 'list':
         list(args[2:])
-    elif args[1] == 'whatis' and len(args) == 3:
-        whatis(args[-1])
+    elif args[1] == 'describe' and len(args) == 3:
+        describe(args[-1])
     elif args[1] == 'tag' and len(args) >= 4:
         tag(args[2:-1], args[-1])
     elif args[1] == 'reload':
@@ -69,9 +69,9 @@ def list(tags):
         print(response.reason, file = sys.stderr)
         sys.exit(1)
 
-def whatis(obj):
+def describe(obj):
     conn = http.client.HTTPConnection('localhost:3134')
-    query = '/whatis?object=%s' % obj
+    query = '/describe?object=%s' % obj
     conn.request('GET', query)
     response = conn.getresponse()
     debug(response.status, response.reason)

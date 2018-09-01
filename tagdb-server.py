@@ -29,8 +29,8 @@ def list():
             matches = matches.intersection(db.get(tag, {}))
         return '\n'.join(m for m in matches)
 
-@app.route('/whatis', methods = ['GET'])
-def whatis():
+@app.route('/describe', methods = ['GET'])
+def describe():
     global db
     obj = request.args.get('object')
     if obj is None:

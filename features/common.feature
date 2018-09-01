@@ -26,7 +26,7 @@ Feature: All features in one file for DRY reasons
   Scenario: query what tags an object has
     Given that the tag "fruit" applies to "banana"
     And that the tag "yellow" applies to "banana"
-    When I enter: "tagdb whatis banana"
+    When I enter: "tagdb describe banana"
     Then the output lines should be "fruit,yellow" in any order
 
 

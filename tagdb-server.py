@@ -16,8 +16,8 @@ def load_database():
         with open(f) as io:
             db[f.split('.')[0]] = {line.strip() for line in io.readlines()}
 
-@app.route('/query', methods = ['GET'])
-def query():
+@app.route('/list', methods = ['GET'])
+def list():
     global db
     taglist = request.args.get('tags')
     if taglist is None:
@@ -28,6 +28,21 @@ def query():
         for tag in tags:
             matches = matches.intersection(db.get(tag, {}))
         return '\n'.join(m for m in matches)
+
+# Chosen to always use PUT to assign a tag, as the operation is required to be
+# idempotent, which is not generally what you expect POST operations to be.
+@app.route('/tag', methods = ['PUT'])
+def tag():
+    global db
+    obj = request.form['object']
+    tags = request.form['tags'].split(',')
+    for tag in tags:
+        objs = db.get(tag, set())
+        objs.add(obj)
+        db[tag] = objs
+        with open(tag + '.tag', 'w') as f:
+            f.write('\n'.join(db[tag]))
+    return ''
 
 @app.route('/reload', methods = ['POST'])
 def reload():

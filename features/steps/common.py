@@ -9,7 +9,7 @@ def step_impl(context, objects, tag):
         for object in objects.split(','):
             f.write(object + '\n')
 
-@when('I issue: "{commandline}"')
+@when('I enter: "{commandline}"')
 def step_impl(context, commandline):
     global output
     http.client.HTTPConnection('localhost:3134').request('POST', '/reload')

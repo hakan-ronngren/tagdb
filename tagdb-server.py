@@ -50,8 +50,8 @@ def tag():
         objs = db.get(tag, set())
         objs.add(obj)
         db[tag] = objs
-        with open(tag + '.tag', 'w') as f:
-            f.write(''.join(["%s\n" % obj for obj in db[tag]]))
+        with open(tag + '.tag', 'a') as f:
+            f.write('%s\n' % obj)
     return ''
 
 @app.route('/tags', methods = ['GET'])

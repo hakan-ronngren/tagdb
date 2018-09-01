@@ -50,6 +50,12 @@ Feature: All features in one file for DRY reasons
     And I enter: "tagdb list fruit"
     Then the output lines should be "apple,banana" in any order
 
+  Scenario: set tag to one object at once (check eof newline on write)
+    When I enter: "tagdb tag fruit banana"
+    And I enter: "tagdb tag fruit apple"
+    And I enter: "tagdb list fruit"
+    Then the output lines should be "apple,banana" in any order
+
   Scenario: set multiple tags to an object
     Given that the tag "yellow" applies to "butter"
     And that the tag "fruit" applies to "apple"

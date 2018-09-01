@@ -9,7 +9,12 @@ import urllib.parse
 verbose = False
 
 def usage():
-    print("todo: implement usage()")
+    print("usage: tagdb <operation> [<arg> [...]]")
+    print("    tagdb tag <tag> [...] <object> : set tag(s) on an object")
+    print("    tagdb list <tag>               : list all objects that have a tag")
+    print("    tagdb whatis <object>          : list all tags for an object")
+    print("    tagdb reload                   : forcefully reload the database")
+    print("    tagdb shutdown                 : shut the database down")
 
 def debug(*args):
     if verbose:
@@ -33,10 +38,14 @@ def main():
         usage()
     elif args[1] == 'list':
         list(args[2:])
+    elif args[1] == 'whatis' and len(args) == 3:
+        whatis(args[-1])
     elif args[1] == 'tag' and len(args) >= 4:
         tag(args[2:-1], args[-1])
-    #elif args[1] == 'tags' and len(args) == 3:
-    #    tags(args[-1])
+    elif args[1] == 'reload':
+        reload()
+    elif args[1] == 'shutdown':
+        shutdown()
     else:
         usage()
         sys.exit(1)
@@ -46,8 +55,26 @@ def list(tags):
     query = '/list?tags=%s' % ','.join(s for s in tags)
     conn.request('GET', query)
     response = conn.getresponse()
-    if verbose:
-        print(response.status, response.reason)
+    debug(response.status, response.reason)
+    if response.status == 200:
+        if int(response.getheader('Content-Length')) > 0:
+            s = response.getheader('Content-Type')
+            i = s.find('charset=')
+            if i > 0:
+                encoding = s[(i + 8):]
+            else:
+                encoding = 'utf-8'
+            print(response.read().decode(encoding))
+    else:
+        print(response.reason, file = sys.stderr)
+        sys.exit(1)
+
+def whatis(obj):
+    conn = http.client.HTTPConnection('localhost:3134')
+    query = '/whatis?object=%s' % obj
+    conn.request('GET', query)
+    response = conn.getresponse()
+    debug(response.status, response.reason)
     if response.status == 200:
         s = response.getheader('Content-Type')
         i = s.find('charset=')
@@ -61,7 +88,6 @@ def list(tags):
         sys.exit(1)
 
 def tag(tags, obj):
-    global verbose
     conn = http.client.HTTPConnection('localhost:3134')
     params = urllib.parse.urlencode({'object': obj, 'tags': ','.join(tags)})
     headers = {"Content-type": "application/x-www-form-urlencoded"}
@@ -69,8 +95,17 @@ def tag(tags, obj):
     response = conn.getresponse()
     debug(response.status, response.reason)
 
-def tags(obj):
-    print('todo: implement tags')
+def reload():
+    conn = http.client.HTTPConnection('localhost:3134')
+    conn.request('POST', '/reload')
+    response = conn.getresponse()
+    debug(response.status, response.reason)
+
+def shutdown():
+    conn = http.client.HTTPConnection('localhost:3134')
+    conn.request('POST', '/shutdown')
+    response = conn.getresponse()
+    debug(response.status, response.reason)
 
 if __name__ == '__main__':
     main()

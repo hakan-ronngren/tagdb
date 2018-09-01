@@ -29,6 +29,16 @@ def list():
             matches = matches.intersection(db.get(tag, {}))
         return '\n'.join(m for m in matches)
 
+@app.route('/whatis', methods = ['GET'])
+def whatis():
+    global db
+    obj = request.args.get('object')
+    if obj is None:
+        return ''
+    else:
+        tags = [tag for tag in db.keys() if obj in db[tag]]
+        return '\n'.join(tags)
+
 # Chosen to always use PUT to assign a tag, as the operation is required to be
 # idempotent, which is not generally what you expect POST operations to be.
 @app.route('/tag', methods = ['PUT'])

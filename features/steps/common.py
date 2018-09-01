@@ -25,4 +25,4 @@ def step_impl(context, expected):
 @then('the output should be empty')
 def step_impl(context):
     global output
-    output.should.equal('\n')
+    output.should.equal('')

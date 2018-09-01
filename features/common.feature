@@ -6,21 +6,28 @@ Feature: All features in one file for DRY reasons
   to rely on execution order.)
 
 
-  Scenario: list one tag
+  Scenario: query what object has one tag
     Given that the tag "fruit" applies to "apple,banana,lemon"
     When I enter: "tagdb list fruit"
     Then the output lines should be "apple,banana,lemon" in any order
 
-  Scenario: list two tags
+  Scenario: query what object has two tags
     Given that the tag "fruit" applies to "apple,banana,lemon"
     And that the tag "yellow" applies to "banana,butter,chicken,lemon"
     When I enter: "tagdb list yellow fruit"
     Then the output lines should be "banana,lemon" in any order
 
-  Scenario: list not mathing a tag
+  Scenario: no matches when an object does not have a particular tag
     Given that the tag "fruit" applies to "apple,banana,lemon"
     When I enter: "tagdb list animal"
     Then the output should be empty
+
+
+  Scenario: query what tags an object has
+    Given that the tag "fruit" applies to "banana"
+    And that the tag "yellow" applies to "banana"
+    When I enter: "tagdb whatis banana"
+    Then the output lines should be "fruit,yellow" in any order
 
 
   Scenario: set an new tag to an object

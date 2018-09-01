@@ -1,2 +1,6 @@
 #!/bin/bash
-exec python "$(dirname "$0")/tagdb.py" "$@"
+if [ ! -z "$PAGER" -a \( "$1" = 'tags' -o "$1" = 'list' \) ] ; then
+    python "$(dirname "$0")/tagdb.py" "$@" | $PAGER
+else
+    exec python "$(dirname "$0")/tagdb.py" "$@"
+fi

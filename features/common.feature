@@ -22,6 +22,12 @@ Feature: All features in one file for DRY reasons
     When I enter: "tagdb list animal"
     Then the output should be empty
 
+  Scenario: exclude a tag
+    Given that the tag "fruit" applies to "apple,banana,pear"
+    And that the tag "yellow" applies to "banana,butter"
+    When I enter: "tagdb list fruit ^yellow"
+    Then the output lines should be "apple,pear" in any order
+
 
   Scenario: query what tags an object has
     Given that the tag "fruit" applies to "banana"

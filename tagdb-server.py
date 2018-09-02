@@ -24,9 +24,13 @@ def list():
         return ''
     else:
         tags = taglist.split(',')
-        matches = db.get(tags.pop(), set())
+        matches = db.get(tags[0], set())
+        tags = tags[1:]
         for tag in tags:
-            matches = matches.intersection(db.get(tag, {}))
+            if tag.startswith('^'):
+                matches = matches.difference(db.get(tag[1:], {}))
+            else:
+                matches = matches.intersection(db.get(tag, {}))
         return '\n'.join(m for m in matches)
 
 @app.route('/describe', methods = ['GET'])

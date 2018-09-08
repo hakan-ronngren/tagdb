@@ -13,7 +13,7 @@ def step_impl(context, objects, tag):
 def step_impl(context, commandline):
     global output
     http.client.HTTPConnection('localhost:3134').request('POST', '/reload')
-    output = os.popen('./' + commandline).read()
+    output = os.popen('./' + commandline + ' 2>&1').read()
 
 @then('the output lines should be "{expected}" in any order')
 def step_impl(context, expected):

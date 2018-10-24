@@ -11,7 +11,8 @@ verbose = False
 def usage():
     print("usage: tagdb <operation> [<arg> [...]]")
     print("    tagdb tag <tag> [...] <object> : set tag(s) on an object")
-    print("    tagdb list <tag>               : list all objects that have a tag")
+    print("    tagdb list <tag> [...]         : list all objects having the given tag(s)")
+    print("                                     exclude a tag by prepending it with ^")
     print("    tagdb describe <object>        : list all tags for an object")
     print("    tagdb reload                   : forcefully reload the database")
     print("    tagdb shutdown                 : shut the database down")

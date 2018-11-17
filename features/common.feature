@@ -76,3 +76,10 @@ Feature: All features in one file for DRY reasons
     Then the output lines should be "apple,banana" in any order
     When I enter: "tagdb list yellow"
     Then the output lines should be "banana,butter" in any order
+
+  Scenario: uncommon characters in object
+    Given that the tag "pair" applies to "salt + pepper"
+    When I enter: "tagdb list pair"
+    Then the output lines should be "salt + pepper" in this order
+    When I enter: "tagdb describe 'salt + pepper'"
+    Then the output lines should be "pair" in this order

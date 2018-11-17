@@ -53,9 +53,11 @@ def main():
         usage()
         sys.exit(1)
 
-def get(query):
+def get(uri, query = {}):
+    if query != {}:
+        uri = uri + '?' + urllib.parse.urlencode(query)
     conn = http.client.HTTPConnection('localhost:3134')
-    conn.request('GET', query)
+    conn.request('GET', uri)
     response = conn.getresponse()
     debug(response.status, response.reason)
     if response.status == 200:
@@ -72,10 +74,10 @@ def get(query):
         sys.exit(1)
 
 def list(tags):
-    get('/list?tags=%s' % ','.join(s for s in tags))
+    get('/list', {'tags': ','.join(s for s in tags)})
 
 def describe(obj):
-    get('/describe?object=%s' % obj)
+    get('/describe', {'object': obj})
 
 def tag(tags, obj):
     conn = http.client.HTTPConnection('localhost:3134')
